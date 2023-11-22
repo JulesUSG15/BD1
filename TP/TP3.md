@@ -1,3 +1,7 @@
+# TP3
+
+## Atomicité d’une transaction courante
+
 ### 1° Créer une table et manipuler des données :
 
 - **Création de la table et insertion de lignes :**
@@ -61,30 +65,30 @@
 
 - **Insertions, ajout de colonne et annulation :**
   ```sql
-  INSERT INTO MaTable VALUES (8, 'Ligne 8'), (9, 'Ligne 9');
-  ALTER TABLE MaTable ADD COLUMN nouvelle_colonne INT;
+  INSERT INTO MaTable (id, nom) VALUES (6, 'Ligne 6');
+  INSERT INTO MaTable (id, nom) VALUES (7, 'Ligne 7');
+  ALTER TABLE MaTable ADD nouvelle_colonne INT;
   ROLLBACK;
   ```
+  La colonne a bien été ajoutée mais le ROLLBACK a supprimé toutes les données.
 
 ### 6° Conclusion sur les transactions :
 
 - **Qu'est-ce qu'une transaction et comment valider ou annuler :**
-  - Une transaction est un ensemble d'instructions SQL formant une unité de travail atomique.
-  - Pour valider les changements, vous utilisez la commande `COMMIT`.
-  - Pour annuler les changements, vous utilisez la commande `ROLLBACK`.
+  Une transaction est une unité de travail. Lorsqu'une transaction aboutit, toutes les modifications sont validées mais si une transaction rencontre des erreurs et doit être annulée ou restaurée, toutes les modifications de données sont supprimées.
+  On peut valider les changements avec `COMMIT` et les annuler avec `ROLLBACK`.
 
-En résumé, une transaction est un moyen de garantir l'atomicité, la cohérence, l'isolation et la durabilité (ACID) des opérations dans une base de données. Vous pouvez valider les changements avec `COMMIT` ou annuler avec `ROLLBACK`. L'utilisation de ces commandes dépend du succès ou de l'échec des opérations à l'intérieur de la transaction.
-
+## Plusieurs sessions sur un seul compte de BD et transactions concurrentes
 
 ### 1° Connexion depuis une autre fenêtre :
 
-- *Se connecter depuis une autre fenêtre :*
-  *Cela dépend du système de gestion de base de données que vous utilisez. En général, vous devrez vous reconnecter avec les mêmes identifiants.*
+- **Se connecter depuis une autre fenêtre :**
+  Toutes les données validées sont visibles.
 
 ### 2° Insérer des lignes depuis les deux fenêtres :
 
-- *Insérer des lignes depuis les deux fenêtres :*
-  *Les modifications faites dans une fenêtre seront visibles dans l'autre après validation avec `COMMIT`.*
+- **Insérer des lignes depuis les deux fenêtres :**
+  Les modifications faites dans l'autre fenêtre ne sont pas visibles. On ne peut les voir qu'après validation avec `COMMIT`.
 
 ### 3° Créer une nouvelle table depuis une fenêtre :
 
