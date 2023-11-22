@@ -193,6 +193,9 @@ SELECT * FROM Dept;
 SELECT * FROM Emp;
 SELECT * FROM Salgrade;
 ```
+![](img/1.png)
+![](img/2.png)
+![](img/3.png)
 
 ### 2. Requêtes SQL :
 
@@ -200,21 +203,25 @@ a. **Employés dirigés par 'King' :**
 ```sql
 SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'KING');
 ```
+![](img/4.png)
 
 b. **Employés dépendant de 'Jones' :**
 ```sql
 SELECT EName FROM Emp START WITH EName = 'JONES' CONNECT BY PRIOR EmpNo = Mgr;
 ```
+![](img/5.png)
 
 c. **Employés dont dépend 'Jones' :**
 ```sql
 SELECT EName FROM Emp START WITH Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'JONES') CONNECT BY PRIOR EmpNo = Mgr;
 ```
+![](img/6.png)
 
 d. **Employés dépendant de 'Blake', sauf 'Blake' lui-même :**
 ```sql
 SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE') AND EmpNo != (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE');
 ```
+![](img/7.png)
 
 e. **Employés dépendant de 'King' sauf ceux dépendant de 'Blake' :**
 ```sql
@@ -222,6 +229,7 @@ SELECT EName FROM Emp
 WHERE Mgr IN (SELECT EmpNo FROM Emp WHERE EName = 'KING') 
 AND Mgr NOT IN (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE');
 ```
+![](img/8.png)
 
 ### 3. Fonction PL/SQL pour le nombre d'employés par département :
 
