@@ -188,35 +188,39 @@ Ces étapes illustrent comment accorder des droits SELECT et INSERT entre deux g
 CREATE TABLE Dept AS SELECT * FROM Scott.Dept;
 CREATE TABLE Emp AS SELECT * FROM Scott.Emp;
 CREATE TABLE Salgrade AS SELECT * FROM Scott.Salgrade;
+
+SELECT * FROM Dept;
+SELECT * FROM Emp;
+SELECT * FROM Salgrade;
 ```
 
 ### 2. Requêtes SQL :
 
 a. **Employés dirigés par 'King' :**
 ```sql
-SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'King');
+SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'KING');
 ```
 
 b. **Employés dépendant de 'Jones' :**
 ```sql
-SELECT EName FROM Emp START WITH EName = 'Jones' CONNECT BY PRIOR EmpNo = Mgr;
+SELECT EName FROM Emp START WITH EName = 'JONES' CONNECT BY PRIOR EmpNo = Mgr;
 ```
 
 c. **Employés dont dépend 'Jones' :**
 ```sql
-SELECT EName FROM Emp START WITH Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'Jones') CONNECT BY PRIOR EmpNo = Mgr;
+SELECT EName FROM Emp START WITH Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'JONES') CONNECT BY PRIOR EmpNo = Mgr;
 ```
 
 d. **Employés dépendant de 'Blake', sauf 'Blake' lui-même :**
 ```sql
-SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'Blake') AND EmpNo != (SELECT EmpNo FROM Emp WHERE EName = 'Blake');
+SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE') AND EmpNo != (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE');
 ```
 
 e. **Employés dépendant de 'King' sauf ceux dépendant de 'Blake' :**
 ```sql
 SELECT EName FROM Emp 
-WHERE Mgr IN (SELECT EmpNo FROM Emp WHERE EName = 'King') 
-AND Mgr NOT IN (SELECT EmpNo FROM Emp WHERE EName = 'Blake');
+WHERE Mgr IN (SELECT EmpNo FROM Emp WHERE EName = 'KING') 
+AND Mgr NOT IN (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE');
 ```
 
 ### 3. Fonction PL/SQL pour le nombre d'employés par département :
@@ -239,6 +243,7 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Nombre d''employés : ' || v_result);
 END;
 /
+```
 
 ### 4. Ajouter la colonne NbEmps à la table Dept :
 
@@ -264,6 +269,7 @@ BEGIN
   END LOOP;
 END;
 /
+```
 
 ### 5. Déclencheur pour mettre à jour le nombre d'employés :
 
@@ -275,6 +281,7 @@ BEGIN
   UPDATE Dept SET NbEmps = GetEmpCount(:NEW.DeptNo) WHERE DeptNo = :NEW.DeptNo;
 END;
 /
+```
 
 ### 6. Procédure pour mettre à jour le département de toute une équipe :
 
