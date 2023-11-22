@@ -117,26 +117,15 @@
 
 ### 8° Insérer une ligne, créer une nouvelle table et ROLLBACK :
 
-- *Insérer une ligne, créer une nouvelle table et ROLLBACK :*
-  ```sql
-  -- Dans la même fenêtre
-  INSERT INTO MaTable VALUES (10, 'Ligne 10');
-  CREATE TABLE NouvelleTable (id INT PRIMARY KEY, nom VARCHAR(50));
-  INSERT INTO NouvelleTable VALUES (1, 'Ligne Nouvelle');
-  -- ROLLBACK
-  ```
+- **Insérer une ligne, créer une nouvelle table et ROLLBACK :**
+  La création de la nouvelle table a validé les données. On peut donc voir la ligne insérée avant la création de la table et la nouvelle table mais pas la ligne insérée après la création de la table.
 
 ### 9° Insérer une ligne, éliminer une table et ROLLBACK :
 
-- *Insérer une ligne, éliminer une table et ROLLBACK :*
-  ```sql
-  -- Dans la même fenêtre
-  INSERT INTO MaTable VALUES (11, 'Ligne 11');
-  DROP TABLE NouvelleTable;
-  -- ROLLBACK
-  ```
-  *La dernière ligne insérée ne sera pas affectée par le ROLLBACK, mais la table supprimée sera restaurée.*
+- **Insérer une ligne, éliminer une table et ROLLBACK :**
+  La suppression de la table a validé les données. On peut donc voir la ligne insérée avant la suppression de la table et la table a bien été supprimée.
 
+## Droits/privilèges entre deux comptes d’une même base de données
 
 ### 1° Accorder le droit SELECT à l'autre groupe :
 
