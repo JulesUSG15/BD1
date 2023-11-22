@@ -3,7 +3,9 @@
 - **Création de la table et insertion de lignes :**
   ```sql
   CREATE TABLE MaTable (id INT PRIMARY KEY, nom VARCHAR(50));
-  INSERT INTO MaTable VALUES (1, 'Ligne 1'), (2, 'Ligne 2'), (3, 'Ligne 3');
+  INSERT INTO MaTable (id, nom) VALUES (1, 'Ligne 1');
+  INSERT INTO MaTable (id, nom) VALUES (2, 'Ligne 2');
+  INSERT INTO MaTable (id, nom) VALUES (3, 'Ligne 3');
   SELECT * FROM MaTable;
   ```
 
@@ -11,6 +13,7 @@
   ```sql
   UPDATE MaTable SET nom = 'Nouveau Nom' WHERE id = 1;
   DELETE FROM MaTable WHERE id = 2;
+  SELECT * FROM MaTable;
   ROLLBACK;
   SELECT * FROM MaTable;
   ```
@@ -25,19 +28,34 @@
   COMMIT;
   ROLLBACK;
   ```
+  La validation a empêché le ROLLBACK de supprimer les modifications.
+- **Suppression des données :**
+  ```sql
+  DELETE FROM MaTable;
+  COMMIT;
+  SELECT * FROM MaTable;
+  ```
 
 ### 3° Fermer une transaction avec EXIT ou QUIT :
 
 - **Insérer des lignes et clore avec EXIT/QUIT :**
   ```sql
-  INSERT INTO MaTable VALUES (6, 'Ligne 6'), (7, 'Ligne 7');
+  INSERT INTO MaTable (id, nom) VALUES (1, 'Ligne 1');
+  INSERT INTO MaTable (id, nom) VALUES (2, 'Ligne 2');
+  INSERT INTO MaTable (id, nom) VALUES (3, 'Ligne 3');
   EXIT;
+  ROLLBACK;
   ```
+  Nous avons été déconnectés de la base de données et les modifications ont été validées.
 
 ### 4° Fermer brutalement la session et revenir :
 
 - **Fermer brutalement et vérifier la persistance des données :**
-  *Les bases de données modernes sont conçues pour gérer cela correctement, mais cela peut dépendre de la base de données spécifique que vous utilisez.*
+  ```sql
+  INSERT INTO MaTable (id, nom) VALUES (4, 'Ligne 4');
+  INSERT INTO MaTable (id, nom) VALUES (5, 'Ligne 5');
+  ```
+  La session a été fermée brutalement et les modifications n'ont pas été validées.
 
 ### 5° Manipuler les données et la structure de la table :
 
