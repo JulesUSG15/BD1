@@ -1,4 +1,4 @@
-# TP3
+# Partie 1 : Transactions
 
 ## Atomicité d’une transaction courante
 
@@ -92,43 +92,28 @@
 
 ### 3° Créer une nouvelle table depuis une fenêtre :
 
-- *Créer une nouvelle table et insérer des lignes :*
-  ```sql
-  -- Dans une fenêtre
-  CREATE TABLE NouvelleTable (id INT PRIMARY KEY, nom VARCHAR(50));
-  INSERT INTO NouvelleTable VALUES (1, 'Nouvelle Ligne 1'), (2, 'Nouvelle Ligne 2');
-  ```
-  *Les changements dans une fenêtre ne sont pas visibles dans l'autre jusqu'à ce que la transaction soit validée.*
+- **Créer une nouvelle table et insérer des lignes :**
+  La nouvelle table est visible dans l'autre fenêtre mais les lignes insérées ne le sont pas.
 
 ### 4° Détruire la nouvelle table :
 
-- *Détruire la nouvelle table :*
-  ```sql
-  -- Dans la même fenêtre
-  DROP TABLE NouvelleTable;
-  ```
-  *La table sera détruite et les changements seront visibles dans l'autre fenêtre après validation.*
+- **Détruire la nouvelle table :**
+  La table est détruite dans les deux fenêtres.
 
 ### 5° Ajouter une clé à la table et tester le ROLLBACK :
 
-- *Ajouter une clé et tester le ROLLBACK :*
-  ```sql
-  -- Dans la même fenêtre
-  ALTER TABLE MaTable ADD COLUMN cle INT;
-  UPDATE MaTable SET cle = 1 WHERE id = 1;
-  -- Essayer d'insérer une ligne avec la même valeur de clé depuis l'autre fenêtre
-  -- ROLLBACK dans l'autre fenêtre
-  ```
+- **Ajouter une clé et tester le ROLLBACK :**
+  Sur la deuxième fenêtre à faire la modification, SQLDevelopper se bloque. Tant que les modifications ne sont pas validées ou annulées sur la première fenêtre, la deuxième fenêtre reste blockée.
 
 ### 6° Fermer la session dans la fenêtre d'insertion :
 
-- *Fermer la session avec EXIT ou QUIT :*
-  *Les mises à jour dans la fenêtre fermée resteront en attente jusqu'à ce qu'elles soient validées ou annulées dans la fenêtre restante.*
+- **Fermer la session avec EXIT ou QUIT :**
+  Quand on se déconnecte proprement, les modifications sont validées et visibles dans les autres fenêtres.
 
 ### 7° Ouvrir une nouvelle session :
 
-- *Ouvrir une nouvelle session et vérifier la dernière transaction :*
-  *Les changements devraient être visibles dans la nouvelle session après validation.*
+- **Ouvrir une nouvelle session et vérifier la dernière transaction :**
+  Les modifications de la dernière transaction sont visibles dans la nouvelle session.
 
 ### 8° Insérer une ligne, créer une nouvelle table et ROLLBACK :
 
