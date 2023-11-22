@@ -165,22 +165,27 @@
   -- Dans le groupe 02
   GRANT INSERT ON AutreGroupe TO INI3A09;
   ```
-  *Reprendre l'insertion :*
+- **Reprendre l'insertion :**
   ```sql
-  -- Dans le groupe 1
-  INSERT INTO groupe2.MaTable VALUES (1, 'Nouvelle Ligne');
+  -- Dans le groupe 09
+  INSERT INTO INI3A09.AutreGroupe VALUES (4, 'Ligne 4');
   ```
+  Le groupe 09 peut maintenant insérer des lignes dans la table du groupe 02.
+  Résultat pour le groupe 02 :
+  ![](img/1.3.4.png)
 
 ### 5° Réaliser une jointure entre les tables des deux groupes :
 
-- *Réaliser une jointure entre les tables des deux groupes :*
+- **Réaliser une jointure entre les tables des deux groupes :**
   ```sql
-  -- Dans le groupe 1
-  SELECT * FROM MaTable JOIN groupe2.MaTable ON MaTable.id = groupe2.MaTable.id;
+  -- Dans le groupe 09
+  CREATE TABLE pc(pc VARCHAR(20), id INT, PRIMARY KEY (id));
+  INSERT INTO pc VALUES ('pc1' , 1);
+  INSERT INTO pc VALUES ('pc2' , 2);
+  INSERT INTO pc VALUES ('pc3' , 3);
+  SEELCT * FROM INI3A02.AutreGroupe a JOIN pc p ON p.id = a.id;
   ```
-
-Ces étapes illustrent comment accorder des droits SELECT et INSERT entre deux groupes dans une base de données, ainsi que comment vérifier les privilèges accordés. Les jointures entre les tables de différents groupes sont également possibles avec les droits appropriés.
-
+  ![](img/1.3.5.png)
 
 ### 1. Copier les tables dans votre compte :
 
