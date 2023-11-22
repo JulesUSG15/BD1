@@ -1,3 +1,5 @@
+Jules GINHAC et Dorian TONNIS
+
 # Partie 1 : Transactions
 
 ## Atomicité d’une transaction courante
@@ -187,6 +189,8 @@
   ```
   ![](img/1.3.5.png)
 
+# Partie 2 : PLSQL
+
 ### 1. Copier les tables dans votre compte :
 
 ```sql
@@ -204,31 +208,31 @@ SELECT * FROM Salgrade;
 
 ### 2. Requêtes SQL :
 
-a. **Employés dirigés par 'King' :**
+**a. Employés dirigés par 'King' :**
 ```sql
 SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'KING');
 ```
 ![](img/4.png)
 
-b. **Employés dépendant de 'Jones' :**
+**b. Employés dépendant de 'Jones' :**
 ```sql
 SELECT EName FROM Emp START WITH EName = 'JONES' CONNECT BY PRIOR EmpNo = Mgr;
 ```
 ![](img/5.png)
 
-c. **Employés dont dépend 'Jones' :**
+**c. Employés dont dépend 'Jones' :**
 ```sql
 SELECT EName FROM Emp START WITH Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'JONES') CONNECT BY PRIOR EmpNo = Mgr;
 ```
 ![](img/6.png)
 
-d. **Employés dépendant de 'Blake', sauf 'Blake' lui-même :**
+**d. Employés dépendant de 'Blake', sauf 'Blake' lui-même :**
 ```sql
 SELECT EName FROM Emp WHERE Mgr = (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE') AND EmpNo != (SELECT EmpNo FROM Emp WHERE EName = 'BLAKE');
 ```
 ![](img/7.png)
 
-e. **Employés dépendant de 'King' sauf ceux dépendant de 'Blake' :**
+**e. Employés dépendant de 'King' sauf ceux dépendant de 'Blake' :**
 ```sql
 SELECT EName FROM Emp 
 WHERE Mgr IN (SELECT EmpNo FROM Emp WHERE EName = 'KING') 
@@ -260,7 +264,7 @@ END;
 
 ### 4. Ajouter la colonne NbEmps à la table Dept :
 
-a. **En utilisant la fonction stockée :**
+**a. En utilisant la fonction stockée :**
 ```sql
 ALTER TABLE Dept ADD NbEmps NUMBER;
 
@@ -268,7 +272,7 @@ UPDATE Dept d
 SET d.NbEmps = GetEmpCount(d.DeptNo);
 ```
 
-b. **En utilisant un curseur :**
+**b. En utilisant un curseur :**
 ```sql
 ALTER TABLE Dept ADD NbEmps NUMBER;
 
