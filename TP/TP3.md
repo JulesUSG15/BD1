@@ -238,6 +238,7 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('Nombre d''employés : ' || v_result);
 END;
 /
+```
 
 ### 4. Ajouter la colonne NbEmps à la table Dept :
 
@@ -263,6 +264,7 @@ BEGIN
   END LOOP;
 END;
 /
+```
 
 ### 5. Déclencheur pour mettre à jour le nombre d'employés :
 
@@ -274,6 +276,7 @@ BEGIN
   UPDATE Dept SET NbEmps = GetEmpCount(:NEW.DeptNo) WHERE DeptNo = :NEW.DeptNo;
 END;
 /
+```
 
 ### 6. Procédure pour mettre à jour le département de toute une équipe :
 
