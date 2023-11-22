@@ -129,36 +129,41 @@
 
 ### 1° Accorder le droit SELECT à l'autre groupe :
 
-- *Accorder le droit SELECT à l'autre groupe :*
+- **Accorder le droit SELECT à l'autre groupe :**
   ```sql
-  -- Dans le groupe 1
-  GRANT SELECT ON MaTable TO groupe2;
+  -- Dans le groupe 02 :
+  CREATE TABLE AutreGroupe (id INT PRIMARY KEY, nom VARCHAR(50));
+  INSERT INTO AutreGroupe (id, nom) VALUES (1, 'Ligne 1');
+  INSERT INTO AutreGroupe (id, nom) VALUES (2, 'Ligne 2');
+  INSERT INTO AutreGroupe (id, nom) VALUES (3, 'Ligne 3');
+  GRANT SELECT ON AutreGroupe TO INI3A09;
   ```
-  *Vérifier le privilège accordé :*
+  **Vérifier le privilège accordé :**
   ```sql
-  SELECT * FROM ALL_TAB_PRIVS WHERE table_name = 'MaTable';
+  -- Dans le groupe 09 :
+  SELECT * FROM ALL_TABLES;
+  SELECT * FROM INI3A02.AutreGroupe;
   ```
+  Le groupe 09 peut voir la table du groupe 02.
+  ![](img/1.3.1.png)
 
 ### 2° Observer les mises à jour de l'autre groupe :
 
-- *Observer les mises à jour de l'autre groupe :*
-  *Les membres du groupe 2 peuvent effectuer des mises à jour sur leur table, mais le groupe 1 ne voit pas ces mises à jour sans le droit correspondant.*
+- **Observer les mises à jour de l'autre groupe :**
+  Si le groupe 02 insère une ligne dans la table et fait un `COMMIT`, le groupe 09 peut la voir mais pas la modifier.
 
 ### 3° Essayer d'insérer une ligne dans la table de l'autre groupe :
 
-- *Essayer d'insérer une ligne sans le droit INSERT :*
-  ```sql
-  -- Dans le groupe 1
-  INSERT INTO groupe2.MaTable VALUES (1, 'Nouvelle Ligne');
-  ```
-  *Cela devrait générer une erreur car le groupe 1 n'a pas le droit d'INSERT.*
+- **Essayer d'insérer une ligne sans le droit INSERT :**
+  Le groupe 09 ne peut pas insérer de ligne dans la table du groupe 02.
+  ![](img/1.3.3.png)
 
 ### 4° Accorder le droit INSERT par l'autre groupe :
 
-- *Accorder le droit INSERT par l'autre groupe :*
+- **Accorder le droit INSERT par l'autre groupe :**
   ```sql
-  -- Dans le groupe 2
-  GRANT INSERT ON MaTable TO groupe1;
+  -- Dans le groupe 02
+  GRANT INSERT ON AutreGroupe TO INI3A09;
   ```
   *Reprendre l'insertion :*
   ```sql
