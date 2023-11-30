@@ -27,7 +27,7 @@ DESC MaTableTT@ORAPEDA2;
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-## 4. Réaliser une jointure de votre table dans ORAPEDA2 avec une table de ORAPEDA3 :
+## 4. Réaliser une jointure de votre table dans ORAPEDA2 avec une table que vous créez dans votre compte de ORAPEDA3 :
 
 ```sql
 SELECT *
@@ -36,36 +36,29 @@ FROM MaTableTT3 A JOIN MaTableTT@orapeda2 B ON A.id3 = B.Colonne1;
 
 ![](imgTT/4.png)
 
-## 5. Mettre à jour votre table dans la base de données ORAPEDA2 à partir de votre compte dans ORAPEDA3. Détruire le lien entre les deux bases :
+5° Mettre à jour votre table dans la base de données ORAPEDA2 à partir de votre compte dans ORAPEDA3. Détruire le lien entre les deux bases :
 
 ```sql
--- Mise à jour
-UPDATE MaTableTT@ORAPEDA2
-SET Colonne2 = 'Ligne 2 modifiée'
-WHERE Colonne1 = 2;
-
-SELECT * FROM MaTableTT@ORAPEDA2;
+-- Dans ORAPEDA3
+CONNECT username/password@ORAPEDA3;
+UPDATE MaTable@ORAPEDA2 SET Colonne2 = 'NouvelleValeur' WHERE Colonne1 = 'Valeur';
 
 -- Destruction du lien
 DROP DATABASE LINK ORAPEDA2;
 ```
 
-![](imgTT/5.1.png)
-![](imgTT/5.2.png)
-
-## 6 Rétablir le lien de ORAPEDA3 vers ORAPEDA2. Vérifier que le lien est bien rétabli :
+6° Rétablir le lien de ORAPEDA3 vers ORAPEDA2. Vérifier que le lien est bien rétabli :
 
 ```sql
-CREATE DATABASE LINK ORAPEDA2 USING 'ORAPEDA2';
+-- Dans ORAPEDA3
+CONNECT username/password@ORAPEDA3;
+CREATE DATABASE LINK ORAPEDA2 CONNECT TO username IDENTIFIED BY "nouveau_mot_de_passe" USING 'ORAPEDA2';
 
+-- Vérification
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-![](imgTT/6.1.png)
-![](imgTT/6.2.png)
-
-7°
-Voici comment créer les tables `ClientLyon`, `CommandeLyon`, `ClientsParis`, et `CommandesParis` :
+## 7 Voici comment créer les tables `ClientLyon`, `CommandeLyon`, `ClientsParis`, et `CommandesParis` :
 
 Sur ORAPEDA2 :
 
@@ -118,6 +111,8 @@ CREATE TABLE CommandesParis (
     livraison VARCHAR2(3)
 );
 ```
+
+![](img/tablecree.png)
 8°
 1. Créer une vue clients sur ORAPEDA3 qui fait l'union des tables clients :
 
