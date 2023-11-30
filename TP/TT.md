@@ -347,7 +347,7 @@ SELECT * FROM ClientsParis_CA_sup_2K;
 
 -Créer une vue matérialisée sur ORAPEDA3 qui instancie les requêtes ORAPEDA2 suivantes :
 
--R1- Nombre de commandes de clients parisiens par client:
+R1- Nombre de commandes de clients parisiens par client:
 
 ```sql
 -- Dans ORAPEDA3
@@ -390,7 +390,3 @@ JOIN
 WHERE
     c.ville = 'Lyon' AND c.CA > 2000;
 ```
-
-Assurez-vous de remplacer "username" et "password" par vos informations d'identification réelles. Ces vues matérialisées seront rafraîchies automatiquement toutes les 5 minutes.
-
-N'oubliez pas de personnaliser ces commandes en fonction de vos besoins spécifiques et des colonnes réelles dans vos tables.
