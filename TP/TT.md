@@ -204,9 +204,9 @@ EXECUTE inserer_nouveau_client(5, 'Nom5', 'Prenom5', 'Adresse5', 'Paris', 5000, 
 EXECUTE inserer_nouveau_client(6, 'Nom6', 'Prenom6', 'Adresse6', 'Lyon', 3000, 0.15);
 ```
 
-9°
+## 9 Analyser (et joindre au compte rendu) le plan d’exécution de chacune des requêtes suivantes:
 
-1. Créez la table destinée à recevoir les détails du plan d'exécution (si elle n'existe pas déjà) :
+-Créez la table destinée à recevoir les détails du plan d'exécution :
 
 ```sql
 -- Dans ORAPEDA3
@@ -238,7 +238,7 @@ CREATE TABLE PLAN_TABLE (
 );
 ```
 
-2. Demandez à Oracle le plan d'exécution pour la requête R1 et stockez-le dans la table PLAN_TABLE :
+-Demandez à Oracle le plan d'exécution pour la requête R1 et stockez-le dans la table PLAN_TABLE :
 
 ```sql
 -- Dans ORAPEDA3
@@ -249,7 +249,7 @@ JOIN commandes cmd ON c.num = cmd.numclt
 WHERE c.ville = 'Lyon';
 ```
 
-3. Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+-Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
 -- Dans ORAPEDA3
@@ -259,8 +259,9 @@ FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R1'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R1';
 ```
+![](imgTT/R1.PNG)
 
-4. Demandez à Oracle le plan d'exécution pour la requête R2 et stockez-le dans la table PLAN_TABLE :
+-Demandez à Oracle le plan d'exécution pour la requête R2 et stockez-le dans la table PLAN_TABLE :
 
    ```sql
    -- Dans ORAPEDA3
@@ -271,7 +272,7 @@ CONNECT BY PRIOR id = parent_id AND statement_id = 'R1';
    WHERE c1.ville = 'Paris' AND c2.ville = 'Lyon';
    ```
 
-5. Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+-Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
 -- Dans ORAPEDA3
@@ -281,8 +282,9 @@ FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R2'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R2';
 ```
+![](imgTT/R2.PNG)
 
-6. Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
+-Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
    
    ```sql
    -- Dans ORAPEDA3
@@ -292,7 +294,7 @@ CONNECT BY PRIOR id = parent_id AND statement_id = 'R2';
    JOIN clients c ON cmd.numclt = c.num
    WHERE c.ville = 'Lyon' AND cmd.livraison = 'non';
    ```
-7. Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+-Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
 -- Dans ORAPEDA3
@@ -302,7 +304,9 @@ FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R3'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R3';
 ```
-8. Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
+![](imgTT/R3.PNG)
+
+-Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
 
    ```sql
    -- Dans ORAPEDA3
@@ -311,7 +315,8 @@ CONNECT BY PRIOR id = parent_id AND statement_id = 'R3';
    FROM clients
    WHERE ville = 'Lyon' AND CA > 2000;
    ```
-8. Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+
+-Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
 -- Dans ORAPEDA3
@@ -321,6 +326,8 @@ FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R4'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R4';
 ```  
+![](imgTT/R4.PNG)
+
 10°
 1. **Utiliser la commande COPY TO pour copier sur ORAPEDA2 les clients de Paris qui ont un CA>2000 sur une nouvelle table ClientsParis_CA_sup_2K :**
 
