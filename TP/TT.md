@@ -58,15 +58,10 @@ CREATE DATABASE LINK ORAPEDA2 CONNECT TO username IDENTIFIED BY "nouveau_mot_de_
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-## 7 Voici comment créer les tables `ClientLyon`, `CommandeLyon`, `ClientsParis`, et `CommandesParis` :
-
-Sur ORAPEDA2 :
+## 7 Sur ORAPEDA2, créer une table ClientLyon et CommandeLyon. De la même manière créer les tables ClientsParis et CommandesParis sur ORAPEDA3` :
 
 ```sql
 -- Dans ORAPEDA2
-CONNECT username/password@ORAPEDA2;
-
--- Création de la table ClientLyon
 CREATE TABLE ClientLyon (
     num NUMBER,
     nom VARCHAR2(50),
@@ -74,25 +69,17 @@ CREATE TABLE ClientLyon (
     adresse VARCHAR2(100),
     ville VARCHAR2(50),
     CA NUMBER,
-    TR NUMBER
+    TR NUMBER(3,2)
 );
 
--- Création de la table CommandeLyon
 CREATE TABLE CommandeLyon (
     num NUMBER,
     datec DATE,
     numclt NUMBER,
     livraison VARCHAR2(3)
 );
-```
 
-Sur ORAPEDA3 :
-
-```sql
 -- Dans ORAPEDA3
-CONNECT username/password@ORAPEDA3;
-
--- Création de la table ClientsParis
 CREATE TABLE ClientsParis (
     num NUMBER,
     nom VARCHAR2(50),
@@ -100,10 +87,9 @@ CREATE TABLE ClientsParis (
     adresse VARCHAR2(100),
     ville VARCHAR2(50),
     CA NUMBER,
-    TR NUMBER
+    TR NUMBER(3,2)
 );
 
--- Création de la table CommandesParis
 CREATE TABLE CommandesParis (
     num NUMBER,
     datec DATE,
@@ -113,31 +99,30 @@ CREATE TABLE CommandesParis (
 ```
 
 ![](img/tablecree.png)
-8°
-1. Créer une vue clients sur ORAPEDA3 qui fait l'union des tables clients :
+
+## 8. Transparence pour la fragmentation :
+
+- Créer une vue clients sur ORAPEDA3 qui fait l'union des tables clients :
 
 ```sql
--- Dans ORAPEDA3
 CREATE VIEW clients AS
-SELECT * FROM ClientsParis
-UNION
-SELECT * FROM ClientLyon;
+    SELECT * FROM ClientsParis
+    UNION
+    SELECT * FROM ClientLyon@orapeda2;
 ```
 
-2. Créer une vue commandes sur ORAPEDA3 qui fait l'union des tables commandes :
+- Créer une vue commandes sur ORAPEDA3 qui fait l'union des tables commandes :
 
 ```sql
--- Dans ORAPEDA3
 CREATE VIEW commandes AS
-SELECT * FROM CommandesParis
-UNION
-SELECT * FROM CommandeLyon;
+    SELECT * FROM CommandesParis
+    UNION
+    SELECT * FROM CommandeLyon@orapeda2;
 ```
 
-3. Écrire une procédure stockée qui insère un nouveau client :
+- Écrire une procédure stockée qui insère un nouveau client :
 
 ```sql
--- Dans ORAPEDA3
 CREATE OR REPLACE PROCEDURE inserer_nouveau_client (
     p_num NUMBER,
     p_nom VARCHAR2,
@@ -148,61 +133,62 @@ CREATE OR REPLACE PROCEDURE inserer_nouveau_client (
     p_TR NUMBER
 ) AS
 BEGIN
-    INSERT INTO ClientsParis VALUES (p_num, p_nom, p_prenom, p_adresse, p_ville, p_CA, p_TR);
+    IF p_ville = 'Paris' THEN
+        INSERT INTO ClientsParis VALUES (p_num, p_nom, p_prenom, p_adresse, p_ville, p_CA, p_TR);
+    ELSIF p_ville = 'Lyon' THEN
+        INSERT INTO ClientLyon@orapeda2 VALUES (p_num, p_nom, p_prenom, p_adresse, p_ville, p_CA, p_TR);
+    END IF;
 END;
 /
 ```
 
-4. Écrire une seconde procédure stockée qui insère une nouvelle commande :
+- Écrire une seconde procédure stockée qui insère une nouvelle commande :
 
 ```sql
--- Dans ORAPEDA3
 CREATE OR REPLACE PROCEDURE inserer_nouvelle_commande (
     p_num NUMBER,
     p_datec DATE,
     p_numclt NUMBER,
     p_livraison VARCHAR2
 ) AS
+    p_ville VARCHAR2(50);
 BEGIN
-    INSERT INTO CommandesParis VALUES (p_num, p_datec, p_numclt, p_livraison);
+    SELECT ville INTO p_ville
+    FROM clients
+    WHERE num = p_numclt;
+    IF p_ville = 'Paris' THEN
+        INSERT INTO CommandesParis VALUES (p_num, p_datec, p_numclt, p_livraison);
+    ELSIF p_ville = 'Lyon' THEN
+        INSERT INTO CommandeLyon@orapeda2 VALUES (p_num, p_datec, p_numclt, p_livraison);
+    END IF;
 END;
 /
 ```
 
-5. Peupler les tables clients d'abord, puis les tables commandes des 2 bases à partir de ORAPEDA3 :
+- Peupler les tables clients d'abord, puis les tables commandes des 2 bases à partir de ORAPEDA3 :
 
 ```sql
--- Dans ORAPEDA3
-EXECUTE inserer_nouveau_client(1, 'Nom1', 'Prenom1', 'Adresse1', 'Paris', 1500, 0.1);
-EXECUTE inserer_nouveau_client(2, 'Nom2', 'Prenom2', 'Adresse2', 'Lyon', 2500, 0.2);
+EXECUTE inserer_nouveau_client(1, 'Jean', 'Michel', '2 rue de la Paix', 'Paris', 2200, 2);
+EXECUTE inserer_nouveau_client(2, 'Jane', 'Doe', '4 rue de la Fraternité', 'Paris', 3500, 3);
+EXECUTE inserer_nouveau_client(3, 'Paul', 'Dupont', '6 avenue de la République', 'Lyon', 2500, 2);
+EXECUTE inserer_nouveau_client(4, 'John', 'Doe', '3 rue de la Liberté', 'Lyon', 2500, 1);
 
 EXECUTE inserer_nouvelle_commande(1, TO_DATE('2023-01-01', 'YYYY-MM-DD'), 1, 'oui');
-EXECUTE inserer_nouvelle_commande(2, TO_DATE('2023-02-01', 'YYYY-MM-DD'), 2, 'non');
+EXECUTE inserer_nouvelle_commande(2, TO_DATE('2023-02-01', 'YYYY-MM-DD'), 1, 'non');
+EXECUTE inserer_nouvelle_commande(3, TO_DATE('2023-03-01', 'YYYY-MM-DD'), 4, 'non');
+
+COMMIT;
 ```
 
-6. Vérifier les insertions en interrogeant la vue clients et la table ClientsParis distante :
+- Vérifier les insertions en interrogeant la vue clients et la table ClientsParis distante :
 
 ```sql
--- Dans ORAPEDA3
 SELECT * FROM clients;
 SELECT * FROM ClientsParis@ORAPEDA2;
 ```
 
-7. Insérer des clients sur le site de Paris et sur le site de Lyon qui ont le même nom de famille :
-
-```sql
--- Dans ORAPEDA3
-EXECUTE inserer_nouveau_client(3, 'Nom3', 'Prenom3', 'Adresse3', 'Paris', 3000, 0.15);
-EXECUTE inserer_nouveau_client(4, 'Nom3', 'Prenom4', 'Adresse4', 'Lyon', 3500, 0.25);
-```
-
-8. Insérer des clients dont le CA est supérieur à 2000 :
-
-```sql
--- Dans ORAPEDA3
-EXECUTE inserer_nouveau_client(5, 'Nom5', 'Prenom5', 'Adresse5', 'Paris', 5000, 0.2);
-EXECUTE inserer_nouveau_client(6, 'Nom6', 'Prenom6', 'Adresse6', 'Lyon', 3000, 0.15);
-```
+![](imgTT/8.1.png)
+![](imgTT/8.2.png)
 
 9°
 
