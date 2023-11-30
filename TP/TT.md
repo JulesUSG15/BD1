@@ -1,43 +1,18 @@
-0° Connectez-vous à la base ORAPEDA2 :
+## 1. Créez un lien de base de données dans votre compte ORAPEDA3 vers votre compte ORAPEDA2 :
 
 ```sql
-CONNECT username/password@ORAPEDA2;
+CREATE DATABASE LINK ORAPEDA2 USING 'ORAPEDA2';
 ```
 
-Créez une table quelconque dans cette base :
-
-```sql
-CREATE TABLE MaTable (
-    Colonne1 NUMBER,
-    Colonne2 VARCHAR2(50)
-);
-```
-
-Ensuite, connectez-vous à la base ORAPEDA3 avec le même mot de passe que dans ORAPEDA2 :
-
-```sql
-CONNECT username/password@ORAPEDA3;
-```
-
-Changez le mot de passe en le rendant identique à celui modifié dans ORAPEDA2 :
-
-```sql
-ALTER USER username IDENTIFIED BY "nouveau_mot_de_passe";
-```
-
-1° Créez un lien de base de données dans votre compte ORAPEDA3 vers votre compte ORAPEDA2 :
-
-```sql
-CREATE DATABASE LINK ORAPEDA2 CONNECT TO username IDENTIFIED BY "nouveau_mot_de_passe" USING 'ORAPEDA2';
-```
-
-Assurez-vous que le compte interrogateur et le compte accédé ont le même nom d'utilisateur et le même mot de passe au moment de la création du lien et au moment de son utilisation.
 
 Vous pouvez vérifier les propriétés du lien en consultant la vue USER_DB_LINKS :
 
 ```sql
-SELECT * FROM USER_DB_LINKS WHERE DB_LINK = 'ORAPEDA2';
+SELECT * FROM USER_DB_LINKS;
 ```
+
+![](imgTT/1.png)
+
 2° Accéder à la structure de votre table dans la base de données ORAPEDA2 par la commande DESC :
 
 ```sql
