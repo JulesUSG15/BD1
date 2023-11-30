@@ -328,27 +328,26 @@ CONNECT BY PRIOR id = parent_id AND statement_id = 'R4';
 ```  
 ![](imgTT/R4.PNG)
 
-10°
-1. **Utiliser la commande COPY TO pour copier sur ORAPEDA2 les clients de Paris qui ont un CA>2000 sur une nouvelle table ClientsParis_CA_sup_2K :**
+## 10 Réplications:
+
+-Utiliser la commande COPY TO pour copier sur ORAPEDA2 les clients de Paris qui ont un CA>2000 sur une nouvelle table ClientsParis_CA_sup_2K :
 
 ```sql
 -- Dans ORAPEDA3
-COPY FROM username/password@ORAPEDA3 TO username/password@ORAPEDA2
+COPY FROM @ORAPEDA3 TO @ORAPEDA2
 CREATE TABLE ClientsParis_CA_sup_2K AS
 SELECT * FROM clients
 WHERE ville = 'Paris' AND CA > 2000;
 ```
-
-Puis interroger la nouvelle table créée :
 
 ```sql
 -- Dans ORAPEDA2
 SELECT * FROM ClientsParis_CA_sup_2K;
 ```
 
-2. **Créer une vue matérialisée sur ORAPEDA3 :**
+-Créer une vue matérialisée sur ORAPEDA3 qui instancie les requêtes ORAPEDA2 suivantes :
 
-Pour créer une vue matérialisée sur ORAPEDA3, vous pouvez utiliser la syntaxe suivante :
+-R1- Nombre de commandes de clients parisiens par client:
 
 ```sql
 -- Dans ORAPEDA3
@@ -371,7 +370,7 @@ GROUP BY
     c.num, c.nom;
 ```
 
-Puis pour la deuxième vue matérialisée :
+R2-Les clients lyonnais (dont le CA>2000) et leurs commandes non livrées:
 
 ```sql
 -- Dans ORAPEDA3
