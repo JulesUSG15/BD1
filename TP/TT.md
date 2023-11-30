@@ -13,36 +13,28 @@ SELECT * FROM USER_DB_LINKS;
 
 ![](imgTT/1.png)
 
-2° Accéder à la structure de votre table dans la base de données ORAPEDA2 par la commande DESC :
+## 2. Accéder à la structure de votre table dans la base de données ORAPEDA2 :
 
 ```sql
-CONNECT username/password@ORAPEDA2;
-DESC MaTable;
+DESC MaTableTT@ORAPEDA2;
 ```
 
-3° Accéder de votre compte de la base ORAPEDA3 au contenu de votre table dans la base de données ORAPEDA2 par la commande SELECT de SQL :
+![](imgTT/2.png)
+
+## 3. Accéder de votre compte de la base ORAPEDA3 au contenu de votre table dans la base de données ORAPEDA2 par la commande SELECT de SQL :
 
 ```sql
-CONNECT username/password@ORAPEDA3;
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-Assurez-vous que vous avez les privilèges nécessaires pour accéder à la table distante.
-
-4° Réaliser une jointure de votre table dans ORAPEDA2 avec une table que vous créez dans votre compte de ORAPEDA3 :
+## 4. Réaliser une jointure de votre table dans ORAPEDA2 avec une table que vous créez dans votre compte de ORAPEDA3 :
 
 ```sql
--- Dans ORAPEDA2
-CONNECT username/password@ORAPEDA2;
-CREATE TABLE MaTable2 (
-    Colonne3 NUMBER,
-    Colonne4 VARCHAR2(50)
-);
-
--- Dans ORAPEDA3
-CONNECT username/password@ORAPEDA3;
-SELECT * FROM MaTable@ORAPEDA2 a JOIN MaTable2 b ON a.Colonne1 = b.Colonne3;
+SELECT *
+FROM MaTableTT3 A JOIN MaTableTT@orapeda2 B ON A.id3 = B.Colonne1;
 ```
+
+![](imgTT/4.png)
 
 5° Mettre à jour votre table dans la base de données ORAPEDA2 à partir de votre compte dans ORAPEDA3. Détruire le lien entre les deux bases :
 
