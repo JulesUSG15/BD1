@@ -254,105 +254,98 @@ WHERE c.ville = 'Lyon';
 - Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
--- Dans ORAPEDA3
 SELECT LPAD(' ', 2 * (LEVEL - 1)) || operation || ' ' || options || ' ' || object_name || ' ' ||
        DECODE(id, 0, 'Cost = ' || position) "Query Plan"
 FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R1'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R1';
 ```
+
 ![](imgTT/R1.PNG)
 
--Demandez à Oracle le plan d'exécution pour la requête R2 et stockez-le dans la table PLAN_TABLE :
-
-   ```sql
-   -- Dans ORAPEDA3
-   EXPLAIN PLAN SET STATEMENT_ID = 'R2' FOR
-   SELECT *
-   FROM clients c1
-   JOIN clients c2 ON c1.nom = c2.nom
-   WHERE c1.ville = 'Paris' AND c2.ville = 'Lyon';
-   ```
-
--Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+- Demandez à Oracle le plan d'exécution pour la requête R2 et stockez-le dans la table PLAN_TABLE :
 
 ```sql
--- Dans ORAPEDA3
+EXPLAIN PLAN SET STATEMENT_ID = 'R2' FOR
+SELECT *
+FROM clients c1
+JOIN clients c2 ON c1.nom = c2.nom
+WHERE c1.ville = 'Paris' AND c2.ville = 'Lyon';
+```
+
+- Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+
+```sql
 SELECT LPAD(' ', 2 * (LEVEL - 1)) || operation || ' ' || options || ' ' || object_name || ' ' ||
        DECODE(id, 0, 'Cost = ' || position) "Query Plan"
 FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R2'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R2';
 ```
+
 ![](imgTT/R2.PNG)
 
--Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
+- Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
    
-   ```sql
-   -- Dans ORAPEDA3
-   EXPLAIN PLAN SET STATEMENT_ID = 'R3' FOR
-   SELECT *
-   FROM commandes cmd
-   JOIN clients c ON cmd.numclt = c.num
-   WHERE c.ville = 'Lyon' AND cmd.livraison = 'non';
-   ```
--Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+```sql
+EXPLAIN PLAN SET STATEMENT_ID = 'R3' FOR
+SELECT *
+FROM commandes cmd
+JOIN clients c ON cmd.numclt = c.num
+WHERE c.ville = 'Lyon' AND cmd.livraison = 'non';
+```
+
+- Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
--- Dans ORAPEDA3
 SELECT LPAD(' ', 2 * (LEVEL - 1)) || operation || ' ' || options || ' ' || object_name || ' ' ||
        DECODE(id, 0, 'Cost = ' || position) "Query Plan"
 FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R3'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R3';
 ```
+
 ![](imgTT/R3.PNG)
 
--Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
-
-   ```sql
-   -- Dans ORAPEDA3
-   EXPLAIN PLAN SET STATEMENT_ID = 'R4' FOR
-   SELECT *
-   FROM clients
-   WHERE ville = 'Lyon' AND CA > 2000;
-   ```
-
--Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+- Demandez à Oracle le plan d'exécution pour la requête R3 et stockez-le dans la table PLAN_TABLE :
 
 ```sql
--- Dans ORAPEDA3
+EXPLAIN PLAN SET STATEMENT_ID = 'R4' FOR
+SELECT *
+FROM clients
+WHERE ville = 'Lyon' AND CA > 2000;
+```
+
+- Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+
+```sql
 SELECT LPAD(' ', 2 * (LEVEL - 1)) || operation || ' ' || options || ' ' || object_name || ' ' ||
        DECODE(id, 0, 'Cost = ' || position) "Query Plan"
 FROM PLAN_TABLE
 START WITH id = 0 AND statement_id = 'R4'
 CONNECT BY PRIOR id = parent_id AND statement_id = 'R4';
-```  
+```
+
 ![](imgTT/R4.PNG)
 
 ## 10 Réplications:
 
--Utiliser la commande COPY TO pour copier sur ORAPEDA2 les clients de Paris qui ont un CA>2000 sur une nouvelle table ClientsParis_CA_sup_2K :
+- Utiliser la commande COPY TO pour copier sur ORAPEDA2 les clients de Paris qui ont un CA>2000 sur une nouvelle table ClientsParis_CA_sup_2K :
 
 ```sql
--- Dans ORAPEDA3
 COPY FROM @ORAPEDA3 TO @ORAPEDA2
 CREATE TABLE ClientsParis_CA_sup_2K AS
 SELECT * FROM clients
 WHERE ville = 'Paris' AND CA > 2000;
-```
 
-```sql
--- Dans ORAPEDA2
 SELECT * FROM ClientsParis_CA_sup_2K;
 ```
 
--Créer une vue matérialisée sur ORAPEDA3 qui instancie les requêtes ORAPEDA2 suivantes :
+- Créer une vue matérialisée sur ORAPEDA3 qui instancie les requêtes ORAPEDA2 suivantes :
 
 R1- Nombre de commandes de clients parisiens par client:
 
 ```sql
--- Dans ORAPEDA3
 CREATE MATERIALIZED VIEW mv_commandes_parisiens
 REFRESH FORCE ON DEMAND
 START WITH SYSDATE
@@ -372,10 +365,9 @@ GROUP BY
     c.num, c.nom;
 ```
 
-R2-Les clients lyonnais (dont le CA>2000) et leurs commandes non livrées:
+R2- Les clients lyonnais (dont le CA>2000) et leurs commandes non livrées:
 
 ```sql
--- Dans ORAPEDA3
 CREATE MATERIALIZED VIEW mv_lyonnais_CA_sup_2K
 REFRESH FORCE ON DEMAND
 START WITH SYSDATE
