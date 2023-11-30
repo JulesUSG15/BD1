@@ -205,8 +205,6 @@ SELECT * FROM clients;
 SELECT * FROM ClientLyon@ORAPEDA2;
 ```
 
-7. Insérer des clients sur le site de Paris et sur le site de Lyon qui ont le même nom de famille :
-
 ![](imgTT/8.1.png)
 ![](imgTT/8.2.png)
 
