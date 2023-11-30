@@ -1,3 +1,7 @@
+Jules GINHAC et Dorian TONNIS
+
+# TT BD1
+
 ## 1. Créez un lien de base de données dans votre compte ORAPEDA3 vers votre compte ORAPEDA2 :
 
 ```sql
@@ -27,7 +31,7 @@ DESC MaTableTT@ORAPEDA2;
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-## 4. Réaliser une jointure de votre table dans ORAPEDA2 avec une table que vous créez dans votre compte de ORAPEDA3 :
+## 4. Réaliser une jointure de votre table dans ORAPEDA2 avec une table de ORAPEDA3 :
 
 ```sql
 SELECT *
@@ -36,29 +40,38 @@ FROM MaTableTT3 A JOIN MaTableTT@orapeda2 B ON A.id3 = B.Colonne1;
 
 ![](imgTT/4.png)
 
-5° Mettre à jour votre table dans la base de données ORAPEDA2 à partir de votre compte dans ORAPEDA3. Détruire le lien entre les deux bases :
+## 5. Mettre à jour votre table dans la base de données ORAPEDA2 à partir de votre compte dans ORAPEDA3. Détruire le lien entre les deux bases :
 
 ```sql
--- Dans ORAPEDA3
-CONNECT username/password@ORAPEDA3;
-UPDATE MaTable@ORAPEDA2 SET Colonne2 = 'NouvelleValeur' WHERE Colonne1 = 'Valeur';
+-- Mise à jour
+UPDATE MaTableTT@ORAPEDA2
+SET Colonne2 = 'Ligne 2 modifiée'
+WHERE Colonne1 = 2;
+
+SELECT * FROM MaTableTT@ORAPEDA2;
 
 -- Destruction du lien
 DROP DATABASE LINK ORAPEDA2;
 ```
 
-6° Rétablir le lien de ORAPEDA3 vers ORAPEDA2. Vérifier que le lien est bien rétabli :
+![](imgTT/5.1.png)
+![](imgTT/5.2.png)
+
+
+## 6. Rétablir le lien de ORAPEDA3 vers ORAPEDA2. Vérifier que le lien est bien rétabli :
 
 ```sql
 -- Dans ORAPEDA3
-CONNECT username/password@ORAPEDA3;
-CREATE DATABASE LINK ORAPEDA2 CONNECT TO username IDENTIFIED BY "nouveau_mot_de_passe" USING 'ORAPEDA2';
+CREATE DATABASE LINK ORAPEDA2 USING 'ORAPEDA2';
 
 -- Vérification
 SELECT * FROM MaTable@ORAPEDA2;
 ```
 
-## 7 Sur ORAPEDA2, créer une table ClientLyon et CommandeLyon. De la même manière créer les tables ClientsParis et CommandesParis sur ORAPEDA3` :
+![](imgTT/6.1.png)
+![](imgTT/6.2.png)
+
+## 7. Sur ORAPEDA2, créer une table ClientLyon et CommandeLyon. De la même manière créer les tables ClientsParis et CommandesParis sur ORAPEDA3` :
 
 ```sql
 -- Dans ORAPEDA2
@@ -190,12 +203,11 @@ SELECT * FROM ClientsParis@ORAPEDA2;
 ![](imgTT/8.1.png)
 ![](imgTT/8.2.png)
 
-## 9 Analyser (et joindre au compte rendu) le plan d’exécution de chacune des requêtes suivantes:
+## 9. Analyser le plan d’exécution de chacune des requêtes suivantes :
 
--Créez la table destinée à recevoir les détails du plan d'exécution :
+- Créez la table destinée à recevoir les détails du plan d'exécution :
 
 ```sql
--- Dans ORAPEDA3
 CREATE TABLE PLAN_TABLE (
     statement_id VARCHAR2(30),
     timestamp DATE,
@@ -224,10 +236,9 @@ CREATE TABLE PLAN_TABLE (
 );
 ```
 
--Demandez à Oracle le plan d'exécution pour la requête R1 et stockez-le dans la table PLAN_TABLE :
+- Demandez à Oracle le plan d'exécution pour la requête R1 et stockez-le dans la table PLAN_TABLE :
 
 ```sql
--- Dans ORAPEDA3
 EXPLAIN PLAN SET STATEMENT_ID = 'R1' FOR
 SELECT *
 FROM clients c
@@ -235,7 +246,7 @@ JOIN commandes cmd ON c.num = cmd.numclt
 WHERE c.ville = 'Lyon';
 ```
 
--Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
+- Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
 
 ```sql
 -- Dans ORAPEDA3
