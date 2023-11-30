@@ -243,10 +243,8 @@ CREATE TABLE PLAN_TABLE (
 ```sql
 -- Dans ORAPEDA3
 EXPLAIN PLAN SET STATEMENT_ID = 'R1' FOR
-SELECT *
-FROM clients c
-JOIN commandes cmd ON c.num = cmd.numclt
-WHERE c.ville = 'Lyon';
+SELECT numclt, COUNT(*) as NombreCommandes
+FROM CommandesParis;
 ```
 
 3. Interrogez la table PLAN_TABLE pour obtenir un plan d'exécution lisible :
