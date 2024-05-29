@@ -150,23 +150,23 @@
 1. **Création d'une vue pour chaque artiste**
 
    ```sql
-   CREATE VIEW vue_artistes AS
-   SELECT id_artiste, XMLElement("artiste",
-       XMLAttributes(id_artiste AS "id", annee_naissance AS "annee_naissance"),
-       XMLElement("nomArtiste", nom_artiste),
-       XMLElement("prenomArtiste", prenom_artiste),
+   CREATE VIEW vue_artiste AS
+   SELECT ARTISTE.id, XMLElement("artiste",
+       XMLAttributes(ARTISTE.id AS "id", ARTISTE.anneenaiss AS "annee_naissance"),
+       XMLElement("nomArtiste", ARTISTE.nom),
+       XMLElement("prenomArtiste", ARTISTE.prenom),
        XMLElement("ses_films",
            XMLAgg(
                XMLElement("film",
-                   XMLAttributes(id_film AS "id_film", annee_sortie AS "annee_sortie"),
-                   titre_film
+                   XMLAttributes(FILM.id AS "id_film", FILM.annee_sortie AS "annee_sortie"),
+                   FILM.titre
                )
            )
        )
    ) AS representation_xml
-   FROM artistes
-   LEFT OUTER JOIN films ON artistes.id_artiste = films.id_artiste
-   GROUP BY id_artiste, annee_naissance, nom_artiste, prenom_artiste;
+   FROM ARTISTE
+   LEFT OUTER JOIN FILM ON ARTISTE.id = FILM.MES
+   GROUP BY ARTISTE.id, ARTISTE.anneenaiss, ARTISTE.nom, ARTISTE.prenom;
    ```
 
 2. **Création d'une vue contenant tous les artistes**
