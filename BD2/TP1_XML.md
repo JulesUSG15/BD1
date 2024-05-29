@@ -90,9 +90,9 @@
    - **Modification avec XMLForest pour structurer les éléments "nomArtiste" et "prenomArtiste"**
      ```sql
      SELECT XMLElement("artiste",
-           XMLAttributes(id_artiste AS "id", annee_naissance AS "annee_naissance"),
-           XMLForest(nom_artiste AS "nomArtiste", prenom_artiste AS "prenomArtiste"))
-     FROM artistes;
+           XMLAttributes(id AS "id"),
+           XMLForest(nom AS "nomArtiste", prenom AS "prenomArtiste"))
+     FROM ARTISTE;
      ```
 
 ### II.4. XMLAgg
