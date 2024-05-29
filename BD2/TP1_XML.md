@@ -29,6 +29,22 @@
      **Description :** Sélectionne la deuxième ligne du troisième discours dans chaque scène.  
      **Code :** Utilisation de l'atelier XQuery pour exécuter la requête.  
      **Résultat :** Renvoie la ligne spécifiée de chaque discours si elle existe.
+     ```xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <LINE>And now, Laertes, what's the news with you?</LINE>
+      <LINE>Hold it a fashion and a toy in blood,</LINE>
+      <LINE>Before you visit him, to make inquire</LINE>
+      <LINE>Might, by the sovereign power you have of us,</LINE>
+      <LINE>But, with a crafty madness, keeps aloof,</LINE>
+      <LINE>be your tutor: suit the action to the word, the</LINE>
+      <LINE>With all the strength and armour of the mind,</LINE>
+      <LINE>Fear me not: withdraw, I hear him coming.</LINE>
+      <LINE>O, here they come.</LINE>
+      <LINE>I do not know from what part of the world</LINE>
+      <LINE>Which may to you, perhaps, seem much unsinew'd,</LINE>
+      <LINE>own defence?</LINE>
+      <LINE>That would not let me sleep: methought I lay</LINE>
+     ```
 
 2. **Traduction des Requêtes en XPath**
 
