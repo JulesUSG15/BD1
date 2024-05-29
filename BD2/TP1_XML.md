@@ -1,4 +1,4 @@
-# Compte Rendu de TP: TP1 BD2 - XML Ginhac Jules
+# Compte Rendu de TP: TP1 BD2 - XML Ginhac Jules et Antonin Sylvestre
 
 ## I. Interrogation de documents XML via XPath
 
