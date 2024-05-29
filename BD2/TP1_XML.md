@@ -28,7 +28,7 @@
    - `//SCENE/SPEECH[3]/LINE[2]`  
      **Description :** Sélectionne la deuxième ligne du troisième discours dans chaque scène.  
      **Code :** Utilisation de l'atelier XQuery pour exécuter la requête.  
-     **Résultat :** Renvoie la ligne spécifiée de chaque discours si elle existe.
+     **Résultat :** Renvoie la 2ème ligne de chaque 3ième "speech" dans une scène
      ```xml
       <?xml version="1.0" encoding="UTF-8"?>
       <LINE>And now, Laertes, what's the news with you?</LINE>
