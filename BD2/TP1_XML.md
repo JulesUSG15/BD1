@@ -8,6 +8,14 @@
      **Description :** Cette requête sélectionne tous les éléments `<TITLE>` qui sont enfants directs de tout élément `<ACT>`.  
      **Code :** Utilisation de l'atelier XQuery pour exécuter la requête.  
      **Résultat :** Renvoie les titres de tous les actes de la pièce.
+     ```xml
+      <?xml version="1.0" encoding="UTF-8"?>
+      <TITLE>ACT I</TITLE>
+      <TITLE>ACT II</TITLE>
+      <TITLE>ACT III</TITLE>
+      <TITLE>ACT IV</TITLE>
+      <TITLE>ACT V</TITLE>
+     ```
 
    - `//LINE/TITLE`  
      **Description :** Tente de sélectionner des éléments `<TITLE>` enfants de `<LINE>`, mais aucun `<TITLE>` n'est enfant de `<LINE>`.  
