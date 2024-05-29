@@ -204,6 +204,3 @@
    RETURNING CONTENT);
    ```
 
-2. **Copie du résultat dans un fichier texte**
-
-   L'enregistrement du résultat HTML dans un fichier texte pourrait être réalisé via une application ou un script qui exécute la requête et stocke le résultat. Vous pourriez ensuite ouvrir ce fichier dans un navigateur pour vérifier le formatage et le contenu.
