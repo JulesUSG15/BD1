@@ -103,21 +103,21 @@
 
    ```sql
    SELECT XMLElement("artiste",
-          XMLAttributes(id_artiste AS "id", annee_naissance AS "annee_naissance"),
-          XMLElement("nomArtiste", nom_artiste),
-          XMLElement("prenomArtiste", prenom_artiste),
-          XMLElement("ses_films",
-              XMLAgg(
-                  XMLElement("film",
-                      XMLAttributes(id_film AS "id_film", annee_sortie AS "annee_sortie"),
-                      titre_film
-                  )
-              )
-          )
-      )
-   FROM artistes
-   JOIN films ON artistes.id_artiste = films.id_artiste
-   GROUP BY id_artiste, annee_naissance, nom_artiste, prenom_artiste;
+            XMLAttributes(ARTISTE.id AS "id", ARTISTE.anneenaiss AS "annee_naissance"),
+            XMLElement("nomArtiste", ARTISTE.nom),
+            XMLElement("prenomArtiste", ARTISTE.prenom),
+            XMLElement("ses_films",
+                XMLAgg(
+                    XMLElement("film",
+                        XMLAttributes(FILM.id AS "id_film", FILM.annee_sortie AS "annee_sortie"),
+                        FILM.titre
+                    )
+                ) 
+            )
+        ) AS "resultat"
+   FROM ARTISTE
+   JOIN FILM ON ARTISTE.id = FILM.MES
+   GROUP BY ARTISTE.id,ARTISTE.anneenaiss, ARTISTE.nom, ARTISTE.prenom;
    ```
 
    Cette requête génère pour chaque artiste un XML comprenant une liste de ses films.
@@ -127,22 +127,22 @@
    Si on remplace `JOIN` par `LEFT OUTER JOIN`, cela permet d'inclure les artistes même s'ils n'ont pas de rôles dans des films. Les artistes sans films auront un élément "ses_films" vide.
 
    ```sql
-   SELECT XMLElement("artiste",
-          XMLAttributes(id_artiste AS "id", annee_naissance AS "annee_naissance"),
-          XMLElement("nomArtiste", nom_artiste),
-          XMLElement("prenomArtiste", prenom_artiste),
+    SELECT XMLElement("artiste",
+          XMLAttributes(ARTISTE.id AS "id", ARTISTE.anneenaiss AS "annee_naissance"),
+          XMLElement("nomArtiste", ARTISTE.nom),
+          XMLElement("prenomArtiste", ARTISTE.prenom),
           XMLElement("ses_films",
               XMLAgg(
                   XMLElement("film",
-                      XMLAttributes(id_film AS "id_film", annee_sortie AS "annee_sortie"),
-                      titre_film
+                      XMLAttributes(FILM.id AS "id_film", FILM.annee_sortie AS "annee_sortie"),
+                      FILM.titre
                   )
-              )
+              ) 
           )
-      )
-   FROM artistes
-   LEFT OUTER JOIN films ON artistes.id_artiste = films.id_artiste
-   GROUP BY id_artiste, annee_naissance, nom_artiste, prenom_artiste;
+      ) AS "resultat"
+   FROM ARTISTE
+   LEFT OUTER JOIN FILM ON ARTISTE.id = FILM.MES
+   GROUP BY ARTISTE.id,ARTISTE.anneenaiss, ARTISTE.nom, ARTISTE.prenom;
    ```
 
 ### II.5. Vues
