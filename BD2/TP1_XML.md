@@ -65,7 +65,7 @@
 
 ## II. Extraction de données relationnelles en XML
 
-### Utilisation de la Fonction XMLElement**
+### II.1 Utilisation de la Fonction XMLElement**
    
    - **Requête pour générer un élément XML pour chaque artiste**
      ```sql
@@ -75,7 +75,7 @@
      FROM artistes;
      ```
 
-### Utilisation de XMLAttributes et XMLForest**
+### II.2 Utilisation de XMLAttributes
    
    - **Requête avec XMLAttributes pour générer un élément "artiste"**
      ```sql
@@ -84,6 +84,8 @@
            nom_artiste)
      FROM artistes;
      ```
+
+### II.3 Utilisation de XMLForest
 
    - **Modification avec XMLForest pour structurer les éléments "nomArtiste" et "prenomArtiste"**
      ```sql
