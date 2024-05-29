@@ -69,10 +69,10 @@
    
    - **Requête pour générer un élément XML pour chaque artiste**
      ```sql
-     SELECT XMLElement("artiste", 
-            XMLElement("nom", nom_artiste),
-            XMLElement("prenom", prenom_artiste))
-     FROM artistes;
+     SELECT XMLElement("ARTISTE", 
+            XMLElement("nom", nom),
+            XMLElement("prenom", prenom))
+     FROM ARTISTE;
      ```
 
 ### II.2 Utilisation de XMLAttributes
