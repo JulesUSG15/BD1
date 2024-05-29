@@ -80,9 +80,9 @@
    - **Requête avec XMLAttributes pour générer un élément "artiste"**
      ```sql
      SELECT XMLElement("artiste",
-           XMLAttributes(id_artiste AS "id", annee_naissance AS "annee_naissance"),
-           nom_artiste)
-     FROM artistes;
+           XMLAttributes(id AS "id", anneenaiss AS "annee_naissance"),
+           nom)
+     FROM ARTISTE;
      ```
 
 ### II.3 Utilisation de XMLForest
