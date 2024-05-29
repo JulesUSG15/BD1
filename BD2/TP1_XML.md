@@ -184,24 +184,35 @@
 1. **Requête XQuery pour transformer en HTML**
 
    ```sql
-   SELECT XMLQuery('
-       <html>
-       <body>
-       <ol>{
-           for $artist in /artiste
-           return <li><a href="mailto:{$artist/nomArtiste}.{$artist/prenomArtiste}@aol.com">
-                   {$artist/nomArtiste} {$artist/prenomArtiste}</a>
-                   <p>Ses films sont:
-                   <ul>{
-                       for $film in $artist/ses_films/film
-                       return <li>{$film}</li>
-                   }</ul>
-                   </p>
-               </li>
-       }</ol>
-       </body>
-       </html>
-   ' PASSING vue_tous_artistes.document_xml AS "artiste"
-   RETURNING CONTENT);
+   SELECT XMLQuery(
+      '<html>
+      <body>
+      <ol>
+      {
+      for $artiste in $id//artiste
+      return
+        <li>
+          <a href="mailto:{$artiste/nomArtiste/text()}.{$artiste/prenomArtiste/text()}@aol.com">{$artiste/nomArtiste/text()} {$artiste/prenomArtiste/text()}</a>
+          <p>Ses films sont :
+          <ul>
+              {
+              for $film in $artiste//film
+              return
+                  <li> {$film/text()},{data($film/@annee_sortie)} </li>
+              }
+          </ul>
+          </p>
+       </li>
+      }
+      </ol>
+      </body>
+      </html>' 
+    PASSING DOCUMENT_XML AS "id"
+    RETURNING CONTENT) AS RSLT
+    FROM vue_ensemble_artistes;
    ```
+   2. **Faire une copie du résultat**
+   résultat :
+ ![image](https://github.com/JulesUSG15/BD1/assets/114994785/76b3eed3-6ddd-4d1b-8533-f63fffa784ea)
+
 
