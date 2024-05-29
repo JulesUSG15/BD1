@@ -172,12 +172,11 @@
 2. **Création d'une vue contenant tous les artistes**
 
    ```sql
-   CREATE VIEW vue_tous_artistes AS
-   SELECT XMLElement("tous_artistes",
-       XMLAgg(
-           (SELECT representation_xml FROM vue_artistes)
-       )
-   ) AS document_xml;
+    CREATE VIEW vue_ensemble_artistes AS
+    SELECT XMLElement("ensemble_artistes",
+        XMLAgg(representation_xml)
+    ) AS document_xml
+    FROM vue_artiste;
    ```
 
 ### II.6. Manipulation de la Vue Obtenue
